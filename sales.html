@@ -5,18 +5,16 @@
     <title>فاتورة مؤسسة حسين الرويعي - النظام الرقمي</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* التنسيق الرقمي للهوية الجديدة */
         body { background: #f8f9fa; color: #333; font-family: 'Arial', sans-serif; padding: 20px; }
         .invoice-box { background: white; padding: 40px; border: 1px solid #dee2e6; max-width: 850px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        
         .header-logo { text-align: center; margin-bottom: 30px; }
         .info-section { display: flex; justify-content: space-between; margin-bottom: 30px; }
         .tax-info { border: 1px solid #333; padding: 10px; border-radius: 5px; }
-        
         table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
         th { background-color: #343a40 !important; color: white !important; padding: 12px; border: 1px solid #dee2e6; text-align: center; }
         td { padding: 12px; border: 1px solid #dee2e6; text-align: center; }
-
+        
+        /* إخفاء عناصر التحكم عند الطباعة */
         @media print {
             .no-print { display: none !important; }
             body { background: white; }
@@ -32,7 +30,7 @@
         <p>القطيف - التركية الصناعية | س.ت: 2053117431</p>
     </div>
 
-    <div class="info-section">
+    <div class="info-section no-print">
         <div class="tax-info">
             <p><strong>الرقم الضريبي:</strong> 310786465500003</p>
             <p><strong>جوال:</strong> 0568687894</p>
@@ -43,12 +41,19 @@
         </div>
     </div>
 
+    <div class="row no-print mb-4">
+        <div class="col-md-3"><input type="text" id="itemNo" class="form-control" placeholder="رقم البند"></div>
+        <div class="col-md-3"><input type="text" id="desc" class="form-control" placeholder="الوصف"></div>
+        <div class="col-md-2"><input type="number" id="qty" class="form-control" placeholder="الكمية"></div>
+        <div class="col-md-2"><input type="number" id="price" class="form-control" placeholder="السعر"></div>
+        <div class="col-md-2"><button class="btn btn-primary w-100" onclick="addRow()">إضافة</button></div>
+    </div>
+
     <table>
         <thead>
             <tr><th>م</th><th>رقم البند</th><th>الوصف</th><th>الكمية</th><th>السعر</th><th>الإجمالي</th></tr>
         </thead>
-        <tbody id="invoiceBody">
-            </tbody>
+        <tbody id="invoiceBody"></tbody>
     </table>
 
     <div class="row">
@@ -57,7 +62,7 @@
             <img src="https://chart.googleapis.com/chart?chs=80x80&cht=qr&chl=ضع_رابط_تقييم_خرائط_جوجل_هنا" alt="QR">
         </div>
         <div class="col-6 text-left">
-            <p>المجموع: <span id="total">0.00</span> ر.س</p>
+            <p>المجموع: <span id="subtotal">0.00</span> ر.س</p>
             <p>ضريبة القيمة المضافة (15%): <span id="vat">0.00</span> ر.س</p>
             <h4 style="color: #dc3545;">الإجمالي النهائي: <span id="grandTotal">0.00</span> ر.س</h4>
         </div>
@@ -70,6 +75,30 @@
 
 <script>
     document.getElementById('date').innerText = new Date().toLocaleDateString('ar-SA');
+    let counter = 1;
+
+    function addRow() {
+        let itemNo = document.getElementById('itemNo').value;
+        let desc = document.getElementById('desc').value;
+        let qty = parseFloat(document.getElementById('qty').value);
+        let price = parseFloat(document.getElementById('price').value);
+        let total = qty * price;
+
+        if(!desc || !qty || !price) return alert("يرجى تعبئة الحقول");
+
+        let tbody = document.getElementById('invoiceBody');
+        tbody.innerHTML += `<tr><td>${counter++}</td><td>${itemNo}</td><td>${desc}</td><td>${qty}</td><td>${price}</td><td>${total.toFixed(2)}</td></tr>`;
+        
+        updateTotals(total);
+    }
+
+    function updateTotals(val) {
+        let sub = parseFloat(document.getElementById('subtotal').innerText) + val;
+        let vat = sub * 0.15;
+        document.getElementById('subtotal').innerText = sub.toFixed(2);
+        document.getElementById('vat').innerText = vat.toFixed(2);
+        document.getElementById('grandTotal').innerText = (sub + vat).toFixed(2);
+    }
 </script>
 </body>
 </html>
