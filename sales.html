@@ -1,43 +1,23 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { background: #121212; color: white; padding: 20px; font-family: sans-serif; }
-        .system-card { background: #1a1a1a; border: 1px solid #ff4d4d; padding: 30px; border-radius: 20px; max-width: 500px; margin: auto; }
-        input { background: #333 !important; border: 1px solid #444 !important; color: white !important; margin-bottom: 15px; }
-        .btn-action { background: #ff4d4d; color: white; width: 100%; padding: 12px; border: none; border-radius: 10px; font-weight: bold; }
-        .result-box { background: #000; padding: 15px; border-radius: 10px; margin-top: 20px; text-align: center; border: 1px solid #ff4d4d; }
-    </style>
-</head>
-<body>
-    <div class="system-card">
-        <a href="categories.html" class="text-danger mb-3 d-block" style="text-decoration:none;">← عودة للأقسام</a>
-        <h4 class="mb-4">نظام البيع - حاسبة السعر</h4>
-        
-        <label>اسم القطعة / الملاحظات:</label>
-        <input type="text" class="form-control" placeholder="مثال: فحمات هافال أمامي">
-        
-        <label>سعر التكلفة (ريال):</label>
-        <input type="number" id="cost" class="form-control" placeholder="0.00">
-        
-        <button onclick="calc()" class="btn-action">حساب السعر (هامش 30%)</button>
-        
-        <div class="result-box">
-            <p class="text-muted mb-1">السعر المقترح للبيع:</p>
-            <h2 id="finalPrice" class="text-warning">0.00 ريال</h2>
-        </div>
-    </div>
-
-    <script>
-        function calc() {
-            let c = parseFloat(document.getElementById('cost').value);
-            if(!isNaN(c)) {
-                let final = c * 1.30;
-                document.getElementById('finalPrice').innerText = final.toFixed(2) + " ريال";
-            }
+<script>
+    function calc() {
+        let name = document.querySelector('input[type="text"]').value;
+        let cost = parseFloat(document.getElementById('cost').value);
+        if(!isNaN(cost)) {
+            let final = (cost * 1.30).toFixed(2);
+            document.getElementById('finalPrice').innerText = final + " ريال";
+            document.getElementById('resultBox').style.display = 'block';
+            
+            // إضافة العملية للسجل
+            let log = document.getElementById('salesLog');
+            let newItem = document.createElement('div');
+            newItem.className = "border-bottom p-2 text-white";
+            newItem.innerHTML = name + " : <span class='text-warning'>" + final + " ريال</span>";
+            log.prepend(newItem);
         }
-    </script>
-</body>
-</html>
+    }
+</script>
+
+<div class="mt-4">
+    <h5>سجل مبيعات اليوم:</h5>
+    <div id="salesLog" class="bg-dark p-2 rounded"></div>
+</div>
