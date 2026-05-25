@@ -1,23 +1,50 @@
-<script>
-    function calc() {
-        let name = document.querySelector('input[type="text"]').value;
-        let cost = parseFloat(document.getElementById('cost').value);
-        if(!isNaN(cost)) {
-            let final = (cost * 1.30).toFixed(2);
-            document.getElementById('finalPrice').innerText = final + " ريال";
-            document.getElementById('resultBox').style.display = 'block';
-            
-            // إضافة العملية للسجل
-            let log = document.getElementById('salesLog');
-            let newItem = document.createElement('div');
-            newItem.className = "border-bottom p-2 text-white";
-            newItem.innerHTML = name + " : <span class='text-warning'>" + final + " ريال</span>";
-            log.prepend(newItem);
-        }
-    }
-</script>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>نظام المبيعات الذكي</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #121212; color: white; padding: 20px; font-family: sans-serif; }
+        .system-card { background: #1a1a1a; border: 1px solid #ff4d4d; padding: 20px; border-radius: 15px; max-width: 500px; margin: auto; }
+        input { background: #333 !important; border: 1px solid #444 !important; color: white !important; margin-bottom: 10px; }
+        .btn-calc { background: #ff4d4d; color: white; width: 100%; padding: 10px; border: none; border-radius: 8px; font-weight: bold; }
+        #salesLog { background: #222; padding: 10px; border-radius: 8px; margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="system-card">
+        <a href="categories.html" class="text-danger mb-3 d-block">← عودة للأقسام</a>
+        <h4>نظام البيع - حاسبة السعر</h4>
+        
+        <label>اسم القطعة:</label>
+        <input type="text" id="itemName" class="form-control" placeholder="اسم القطعة">
+        
+        <label>سعر التكلفة (ريال):</label>
+        <input type="number" id="cost" class="form-control" placeholder="0.00">
+        
+        <button onclick="addSale()" class="btn-calc">حساب وتسجيل السعر</button>
+        
+        <h4 class="mt-4">سجل مبيعات اليوم:</h4>
+        <div id="salesLog"></div>
+    </div>
 
-<div class="mt-4">
-    <h5>سجل مبيعات اليوم:</h5>
-    <div id="salesLog" class="bg-dark p-2 rounded"></div>
-</div>
+    <script>
+        function addSale() {
+            let name = document.getElementById('itemName').value;
+            let cost = parseFloat(document.getElementById('cost').value);
+            if(!isNaN(cost) && name !== "") {
+                let final = (cost * 1.30).toFixed(2);
+                let log = document.getElementById('salesLog');
+                let entry = document.createElement('div');
+                entry.className = "border-bottom border-secondary p-2";
+                entry.innerHTML = name + ": <span class='text-warning'>" + final + " ريال</span>";
+                log.prepend(entry);
+                // تفريغ الحقول بعد التسجيل
+                document.getElementById('itemName').value = "";
+                document.getElementById('cost').value = "";
+            }
+        }
+    </script>
+</body>
+</html>
