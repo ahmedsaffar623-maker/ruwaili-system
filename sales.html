@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>نظام البيع - مؤسسة الرويعي</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #000; color: white; padding: 30px; }
+        .calc-box { background: #1a1a1a; padding: 25px; border-radius: 15px; border: 1px solid #ff4d4d; max-width: 400px; margin: auto; }
+    </style>
+</head>
+<body>
+    <div class="calc-box">
+        <a href="categories.html" class="text-danger mb-3 d-block">← عودة للأقسام</a>
+        <h4 class="mb-4">حاسبة السعر الذكية</h4>
+        
+        <label>سعر التكلفة (ريال):</label>
+        <input type="number" id="cost" class="form-control mb-3" placeholder="أدخل التكلفة">
+        
+        <label>نسبة الربح (%):</label>
+        <input type="number" id="margin" class="form-control mb-3" value="30">
+        
+        <button onclick="calculate()" class="btn btn-danger w-100">حساب سعر البيع</button>
+        
+        <div id="result" class="mt-4 p-3 bg-dark rounded text-center" style="display:none;">
+            <h5>سعر البيع المقترح:</h5>
+            <h2 id="finalPrice" class="text-warning">0</h2>
+        </div>
+    </div>
+
+    <script>
+        function calculate() {
+            let cost = parseFloat(document.getElementById('cost').value);
+            let margin = parseFloat(document.getElementById('margin').value);
+            let final = cost + (cost * (margin / 100));
+            document.getElementById('finalPrice').innerText = final.toFixed(2) + " ريال";
+            document.getElementById('result').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
