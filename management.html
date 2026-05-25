@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>إدارة النظام | مؤسسة الرويعي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Cairo',sans-serif; }
+        body { background:#0F172A; color:white; padding:40px; }
+        
+        .header { margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+        .back-btn { background: #334155; color: white; padding: 10px 20px; border-radius: 10px; text-decoration: none; }
+        
+        .tabs { display: flex; gap: 10px; margin-bottom: 30px; }
+        .tab-btn { padding: 12px 25px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #94A3B8; border-radius: 12px; cursor: pointer; transition: 0.3s; }
+        .tab-btn.active { background: #2563EB; color: white; border-color: #2563EB; }
+        
+        .page { display: none; }
+        .page.active { display: block; }
+        
+        .card { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); backdrop-filter:blur(15px); padding:30px; border-radius:25px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; color: #E2E8F0; }
+        th { text-align: right; padding: 15px; border-bottom: 2px solid #1E293B; }
+        td { padding: 15px; border-bottom: 1px solid #1E293B; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>إدارة العمليات</h1>
+        <a href="dashboard.html" class="back-btn"><i class="fa-solid fa-arrow-right"></i> العودة للوحة التحكم</a>
+    </div>
+
+    <div class="tabs">
+        <div class="tab-btn active" onclick="showPage('inventory', this)">المخزون</div>
+        <div class="tab-btn" onclick="showPage('invoices', this)">الفواتير</div>
+        <div class="tab-btn" onclick="showPage('purchases', this)">المشتريات</div>
+        <div class="tab-btn" onclick="showPage('reports', this)">التقارير</div>
+    </div>
+
+    <div id="inventory" class="page active">
+        <div class="card">
+            <table>
+                <thead><tr><th>رقم القطعة</th><th>الاسم</th><th>الكمية</th><th>الحالة</th></tr></thead>
+                <tbody><tr><td>-</td><td>-</td><td>-</td><td>-</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="invoices" class="page">
+        <div class="card"><p>قائمة الفواتير فارغة</p></div>
+    </div>
+
+    <div id="purchases" class="page">
+        <div class="card"><p>لا توجد طلبات شراء</p></div>
+    </div>
+
+    <div id="reports" class="page">
+        <div class="card"><p>التقارير سيتم توليدها لاحقاً</p>
+    </div>
+
+    <script>
+        function showPage(pageId, element) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            element.classList.add('active');
+        }
+    </script>
+</body>
+</html>
