@@ -2,83 +2,80 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>الرويعي الذكي</title>
+    <title>نظام الرويعي الذكي المتكامل</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background: #f4f7f6; }
+        :root { --primary: #0c2340; --accent: #d4af37; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f4f7f6; display: flex; }
         
-        /* واجهة الدخول */
-        #login-page { display: flex; justify-content: center; align-items: center; height: 100vh; background: #0c2340; }
-        .login-card { background: white; padding: 40px; border-radius: 20px; width: 350px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
-        .btn-login { width: 100%; padding: 12px; background: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer; }
+        /* القائمة الجانبية */
+        .sidebar { width: 280px; background: var(--primary); color: white; height: 100vh; padding: 20px; }
+        .group-title { color: var(--accent); font-weight: bold; margin-top: 20px; border-bottom: 1px solid #1e3a5f; padding-bottom: 5px; }
+        .nav-item { padding: 10px; cursor: pointer; color: #ccc; }
+        .nav-item:hover { color: white; background: #1e3a5f; }
         
-        /* النظام الداخلي */
-        #main-app { display: none; display: flex; height: 100vh; }
-        .sidebar { width: 260px; background: #1e293b; color: white; padding: 20px; overflow-y: auto; }
-        .menu-group { margin-bottom: 20px; border-bottom: 1px solid #334155; padding-bottom: 10px; }
-        .group-title { color: #d4af37; font-weight: bold; margin-bottom: 10px; }
-        .nav-item { padding: 10px; cursor: pointer; color: #cbd5e1; }
-        .nav-item:hover { background: #334155; color: white; }
-        
+        /* المحتوى */
         .content { flex: 1; padding: 30px; }
         .page { display: none; }
         .active { display: block; }
-        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; background: white; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
+        .search-bar { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #ddd; }
     </style>
 </head>
 <body>
 
-    <div id="login-page">
-        <div class="login-card">
-            <h2>الرويعي الذكي 🚗</h2>
-            <p>نظام إدارة قطع غيار السيارات الصينية</p>
-            <input type="text" id="user" placeholder="اسم المستخدم">
-            <input type="password" id="pass" placeholder="كلمة المرور">
-            <button class="btn-login" onclick="login()">دخول النظام</button>
-        </div>
+<div class="sidebar">
+    <h2 style="color:var(--accent); text-align:center;">الرويعي الذكي</h2>
+    
+    <div class="group-title">📦 المخزون والأصناف</div>
+    <div class="nav-item" onclick="show('items')">قائمة الأصناف والبحث</div>
+    <div class="nav-item" onclick="show('inventory')">مراقبة الجرد</div>
+
+    <div class="group-title">🧾 الفواتير</div>
+    <div class="nav-item" onclick="show('sales')">المبيعات</div>
+    <div class="nav-item" onclick="show('purchases')">المشتريات</div>
+    
+    <div class="group-title">📊 التقارير</div>
+    <div class="nav-item" onclick="show('reports')">التقارير المالية والضريبة</div>
+</div>
+
+<div class="content">
+    <div id="items" class="page active">
+        <h1>إدارة الأصناف (قاعدة البيانات)</h1>
+        <input type="text" id="searchInput" class="search-bar" placeholder="ابحث عن رقم القطعة أو الاسم..." onkeyup="searchItems()">
+        <table id="itemsTable">
+            <thead><tr><th>رقم القطعة</th><th>اسم القطعة</th><th>الموديل</th></tr></thead>
+            <tbody></tbody>
+        </table>
     </div>
+    <div id="inventory" class="page"><h1>مراقبة الجرد</h1><p>قسم الجرد.</p></div>
+    <div id="sales" class="page"><h1>المبيعات</h1></div>
+    <div id="purchases" class="page"><h1>المشتريات</h1></div>
+    <div id="reports" class="page"><h1>التقارير والزكاة</h1></div>
+</div>
 
-    <div id="main-app">
-        <div class="sidebar">
-            <div class="menu-group">
-                <div class="group-title">الرئيسية</div>
-                <div class="nav-item" onclick="show('dashboard')">لوحة التحكم</div>
-            </div>
-            <div class="menu-group">
-                <div class="group-title">📦 المخزون</div>
-                <div class="nav-item" onclick="show('inventory')">مراقبة المخزون والجرد</div>
-            </div>
-            <div class="menu-group">
-                <div class="group-title">🧾 الفواتير</div>
-                <div class="nav-item" onclick="show('sales')">المبيعات</div>
-                <div class="nav-item" onclick="show('purchases')">المشتريات</div>
-            </div>
-            <div class="menu-group">
-                <div class="group-title">📊 التقارير</div>
-                <div class="nav-item" onclick="show('reports')">عرض كافة التقارير</div>
-            </div>
-        </div>
-        
-        <div class="content">
-            <div id="dashboard" class="page active"><div class="card"><h1>لوحة التحكم</h1><p>مرحباً بك في نظام مؤسسة الرويعي.</p></div></div>
-            <div id="inventory" class="page"><div class="card"><h1>إدارة المخزون</h1><p>هنا ستظهر جداول الأصناف وحركة القطع.</p></div></div>
-            <div id="sales" class="page"><div class="card"><h1>المبيعات</h1></div></div>
-            <div id="purchases" class="page"><div class="card"><h1>المشتريات</h1></div></div>
-            <div id="reports" class="page"><div class="card"><h1>التقارير المالية والضريبية</h1></div></div>
-        </div>
-    </div>
+<script>
+    // قاعدة بيانات القطع المدمجة من ملفاتك
+    const dbItems = [
+        { partNo: "10110451310000", name: "OIL COLLER", model: "GAC MOTOR" },
+        { partNo: "10120231310000", name: "WATER PUMP", model: "GAC" },
+        { partNo: "10120221510000", name: "WATER PUMP", model: "GSE" }
+    ];
 
-    <script>
-        function login() {
-            // تحقق بسيط (يمكنك تطويره لاحقاً)
-            document.getElementById('login-page').style.display = 'none';
-            document.getElementById('main-app').style.display = 'flex';
-        }
+    function show(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
 
-        function show(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-        }
-    </script>
+    function searchItems() {
+        let query = document.getElementById('searchInput').value.toLowerCase();
+        let tbody = document.querySelector('#itemsTable tbody');
+        tbody.innerHTML = dbItems.filter(i => i.partNo.includes(query) || i.name.toLowerCase().includes(query))
+            .map(i => `<tr><td>${i.partNo}</td><td>${i.name}</td><td>${i.model}</td></tr>`).join('');
+    }
+
+    // عرض البيانات عند التشغيل
+    window.onload = searchItems;
+</script>
 </body>
 </html>
