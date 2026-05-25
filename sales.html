@@ -1,54 +1,43 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <title>نظام المبيعات الذكي</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { background: #121212; color: white; padding: 20px; font-family: sans-serif; }
-        .system-card { background: #1a1a1a; border: 1px solid #ff4d4d; padding: 20px; border-radius: 15px; max-width: 500px; margin: auto; }
-        input { background: #333 !important; border: 1px solid #444 !important; color: white !important; margin-bottom: 10px; }
-        .btn-calc { background: #ff4d4d; color: white; width: 100%; padding: 10px; border: none; border-radius: 8px; font-weight: bold; }
-        #salesLog { background: #222; padding: 10px; border-radius: 8px; margin-top: 15px; }
-    </style>
-</head>
-<body>
-    <div class="system-card">
-        <a href="categories.html" class="text-danger mb-3 d-block">← عودة للأقسام</a>
-        <h4>نظام البيع - حاسبة السعر</h4>
-        
-        <label>اسم القطعة:</label>
-        <input type="text" id="itemName" class="form-control" placeholder="اسم القطعة">
-        
-        <label>سعر التكلفة (ريال):</label>
-        <input type="number" id="cost" class="form-control" placeholder="0.00">
-        
-        <button onclick="addSale()" class="btn-calc">حساب وتسجيل السعر</button>
-        
-        <h4 class="mt-4">سجل مبيعات اليوم:</h4>
-        <div id="salesLog"></div>
-    </div>
+<div class="system-card">
+    <h4>الفاتورة والعمليات</h4>
+    
+    <table class="table table-dark table-striped">
+        <thead>
+            <tr>
+                <th>القطعة</th>
+                <th>الكمية</th>
+                <th>السعر</th>
+                <th>الإجمالي</th>
+            </tr>
+        </thead>
+        <tbody id="invoiceBody">
+            </tbody>
+    </table>
 
-    <script>
-        function addSale() {
-            let name = document.getElementById('itemName').value;
-            let cost = parseFloat(document.getElementById('cost').value);
-            if(!isNaN(cost) && name !== "") {
-                let final = (cost * 1.30).toFixed(2);
-                let log = document.getElementById('salesLog');
-                let entry = document.createElement('div');
-                entry.className = "border-bottom border-secondary p-2";
-                entry.innerHTML = name + ": <span class='text-warning'>" + final + " ريال</span>";
-                log.prepend(entry);
-                // تفريغ الحقول بعد التسجيل
-                document.getElementById('itemName').value = "";
-                document.getElementById('cost').value = "";
-                // أضف هذا داخل دالة addSale بعد تعريف متغير final
-let time = new Date().toLocaleTimeString('ar-SA');
-entry.innerHTML = name + " (" + time + "): <span class='text-warning'>" + final + " ريال</span>";
-                
-            }
-        }
-    </script>
-</body>
-</html>
+    <div class="row mt-3">
+        <div class="col-6">
+            <select id="paymentType" class="form-control bg-dark text-white">
+                <option value="cash">كاش</option>
+                <option value="mada">شبكة</option>
+                <option value="transfer">تحويل بنكي</option>
+            </select>
+        </div>
+        <div class="col-6">
+            <button class="btn btn-warning w-100" onclick="holdInvoice()">تعليق الفاتورة</button>
+        </div>
+    </div>
+    
+    <button class="btn-calc mt-3" onclick="finalizeInvoice()">إتمام البيع</button>
+</div>
+
+<script>
+    function holdInvoice() {
+        alert("تم تعليق الفاتورة بنجاح، يمكنك البدء بعملية جديدة.");
+        // هنا سنضيف لاحقاً كود الحفظ المؤقت
+    }
+    
+    function finalizeInvoice() {
+        let payment = document.getElementById('paymentType').value;
+        alert("تمت العملية بنجاح عبر: " + payment);
+    }
+</script>
