@@ -64,9 +64,7 @@
         </div>
     </main>
 </div>
-
-</body>
-    <script>
+<script>
 async function loadInventory() {
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSnkWPRCRsJDvFPh6YXTCGZcg8DQs-2b6-ziJKDE_OpFcRB3sB2UeTUkAxe6EPPOJiVYtI_o9H8KyqM/pub?gid=0&single=true&output=csv';
     const response = await fetch(csvUrl);
@@ -89,6 +87,8 @@ async function loadInventory() {
     });
 }
 loadInventory();
-    </script>
+</script>
+</body>
+    
     
 </html>
