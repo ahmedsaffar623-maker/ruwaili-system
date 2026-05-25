@@ -21,46 +21,30 @@
         <h4 class="text-center mb-4">نظام الرويعي</h4>
         <nav class="nav flex-column">
             <a href="#" class="nav-link active"><i class="bi bi-house-door"></i> الرئيسية</a>
+            <a href="#" class="nav-link"><i class="bi bi-cart"></i> الطلبات</a>
             <a href="#" class="nav-link"><i class="bi bi-box-seam"></i> المخزون</a>
+            <a href="#" class="nav-link"><i class="bi bi-people"></i> العملاء</a>
+            <a href="#" class="nav-link"><i class="bi bi-tools"></i> الورش</a>
+            <a href="#" class="nav-link"><i class="bi bi-graph-up"></i> التقارير</a>
         </nav>
     </div>
     <main class="col-md-10 p-4">
         <div class="row g-4">
-            <div class="col-md-3"><div class="stat-card"><h5>المخزون الكلي</h5><div class="stat-value" id="totalItems">...</div></div></div>
+            <div class="col-md-3"><div class="stat-card"><h5>طلبات اليوم</h5><div class="stat-value">15</div></div></div>
+            <div class="col-md-3"><div class="stat-card"><h5>المبيعات</h5><div class="stat-value">12,400 ر.س</div></div></div>
+            <div class="col-md-3"><div class="stat-card"><h5>قطع ناقصة</h5><div class="stat-value text-danger">08</div></div></div>
+            <div class="col-md-3"><div class="stat-card"><h5>طلبات ورش</h5><div class="stat-value text-warning">05</div></div></div>
         </div>
         <div class="mt-5">
             <table class="table table-dark table-hover align-middle">
-                <thead><tr><th>#</th><th>رقم القطعة</th><th>الموقع</th><th>الكمية</th><th>الحالة</th></tr></thead>
-                <tbody id="inventoryBody">
-                    <tr><td colspan="5" class="text-center">جاري تحميل البيانات...</td></tr>
+                <thead><tr><th>صورة</th><th>رقم القطعة</th><th>الموقع</th><th>الكمية</th><th>الحالة</th></tr></thead>
+                <tbody>
+                    <tr><td>[صورة]</td><td>GAC-100</td><td>رف 1</td><td>15</td><td><span class="badge bg-success">متوفر</span></td></tr>
+                    <tr><td>[صورة]</td><td>HAV-99</td><td>رف 3</td><td>2</td><td><span class="badge bg-warning text-dark">قليل</span></td></tr>
                 </tbody>
             </table>
         </div>
     </main>
 </div>
-
-<script>
-async function loadInventory() {
-    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSnkWPRCRsJDvFPh6YXTCGZcg8DQs-2b6-ziJKDE_OpFcRB3sB2UeTUkAxe6EPPOJiVYtI_o9H8KyqM/pub?gid=0&single=true&output=csv';
-    try {
-        const response = await fetch(csvUrl);
-        const data = await response.text();
-        const rows = data.split('\n').slice(1);
-        const tableBody = document.getElementById('inventoryBody');
-        tableBody.innerHTML = '';
-        rows.forEach((row, index) => {
-            const cols = row.split(',');
-            if (cols.length < 8) return;
-            const partNum = cols[0];
-            const qty = parseInt(cols[5]);
-            const minQty = parseInt(cols[6]);
-            const location = cols[7];
-            let status = (qty <= 0) ? '<span class="badge bg-danger">غير متوفر</span>' : (qty <= minQty) ? '<span class="badge bg-warning text-dark">قليل</span>' : '<span class="badge bg-success">متوفر</span>';
-            tableBody.innerHTML += `<tr><td>${index+1}</td><td>${partNum}</td><td>${location}</td><td>${qty}</td><td>${status}</td></tr>`;
-        });
-    } catch (e) { console.error(e); }
-}
-loadInventory();
-</script>
 </body>
 </html>
