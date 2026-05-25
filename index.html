@@ -2,8 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام مؤسسة الرويعي الذكي</title>
+    <title>تسجيل الدخول | نظام مؤسسة الرويعي</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -18,72 +17,70 @@
             color: #ffffff;
         }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.05);
+        .login-card {
+            background: rgba(30, 41, 59, 0.7);
             backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
             padding: 40px;
             border-radius: 25px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             width: 100%;
-            max-width: 450px;
+            max-width: 400px;
             text-align: center;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
         }
 
-        h2 { font-weight: 700; margin-bottom: 10px; }
-        p { color: #94A3B8; margin-bottom: 30px; }
+        h2 { font-weight: 700; margin-bottom: 5px; color: #fff; }
+        p { color: #94A3B8; margin-bottom: 30px; font-size: 0.9rem; }
 
         input {
             width: 100%;
-            padding: 15px;
-            margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 15px;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid #2563EB;
+            border-radius: 10px;
             color: #fff;
             box-sizing: border-box;
         }
 
-        .btn-login {
-            background: #2563EB;
-            color: white;
+        button {
             width: 100%;
-            padding: 15px;
+            padding: 14px;
+            background: #2563EB;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
+            color: white;
             font-weight: bold;
             cursor: pointer;
             transition: 0.3s;
         }
 
-        .btn-login:hover { background: #1d4ed8; }
+        button:hover { background: #1d4ed8; }
 
         .brands {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
             margin-top: 30px;
             color: #64748B;
-            font-size: 0.9rem;
-            font-weight: 400;
+            font-size: 0.8rem;
+            text-transform: uppercase;
         }
     </style>
 </head>
 <body>
 
-    <div class="glass-card">
+    <div class="login-card">
         <h2>مؤسسة الرويعي</h2>
-        <p>نظام إدارة قطع الغيار الذكي</p>
+        <p>نظام مؤسسة الرويعي الذكي لإدارة قطع الغيار</p>
         
         <form>
             <input type="text" placeholder="اسم المستخدم" required>
             <input type="password" placeholder="كلمة المرور" required>
-            <button type="submit" class="btn-login">دخول النظام</button>
+            <button type="submit">دخول النظام</button>
         </form>
 
         <div class="brands">
-            <span>GAC</span> | <span>HAVAL</span> | <span>CHANGAN</span> | <span>JETOUR</span>
+            <span>GAC MOTOR</span> | <span>HAVAL</span> | <span>CHANGAN</span> | <span>JETOUR</span>
         </div>
     </div>
 
