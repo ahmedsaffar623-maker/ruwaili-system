@@ -2,54 +2,56 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>الرويعي الذكي - نظام متكامل</title>
+    <title>نظام الرويعي الذكي | المحرك الذكي</title>
     <style>
         :root { --primary: #0c2340; --accent: #d4af37; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f4f7f6; display: flex; }
-        .sidebar { width: 260px; background: var(--primary); color: white; height: 100vh; padding: 20px; }
-        .group-title { color: var(--accent); font-weight: bold; margin-top: 15px; border-bottom: 1px solid #1e3a5f; padding-bottom: 5px; }
-        .nav-item { padding: 10px; cursor: pointer; color: #ccc; }
-        .nav-item:hover { background: #1e3a5f; color: white; }
+        .sidebar { width: 280px; background: var(--primary); color: white; height: 100vh; padding: 20px; }
+        .nav-item { padding: 12px; cursor: pointer; color: #cbd5e1; border-bottom: 1px solid #1e3a5f; }
+        .nav-item:hover { color: white; background: #1e3a5f; }
         .content { flex: 1; padding: 30px; }
         .page { display: none; }
         .active { display: block; }
-        .search-bar { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px; }
-        table { width: 100%; border-collapse: collapse; background: white; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
     <h2 style="color:var(--accent); text-align:center;">الرويعي الذكي</h2>
-    <div class="group-title">📦 إدارة الأصناف</div>
-    <div class="nav-item" onclick="show('itemsPage')">البحث في الأصناف</div>
-    <div class="group-title">🧾 العمليات</div>
-    <div class="nav-item" onclick="show('salesPage')">تسجيل مبيعات</div>
-    <div class="nav-item" onclick="show('reportsPage')">التقارير</div>
+    <div class="nav-item" onclick="show('smartSearch')">🔍 محرك البحث الذكي (الشاصي)</div>
+    <div class="nav-item" onclick="show('inventory')">📦 إدارة المخزون والأصناف</div>
+    <div class="nav-item" onclick="show('sales')">🧾 تسجيل المبيعات</div>
 </div>
 
 <div class="content">
-    <div id="itemsPage" class="page active">
-        <h1>البحث في الأصناف</h1>
-        <input type="text" id="searchInput" class="search-bar" placeholder="ابحث برقم القطعة أو الاسم..." onkeyup="searchItems()">
-        <table id="itemsTable">
-            <thead><tr><th>رقم القطعة</th><th>اسم القطعة</th><th>الموديل</th></tr></thead>
-            <tbody></tbody>
-        </table>
+    <div id="smartSearch" class="page active">
+        <div class="card">
+            <h1>المحرك الذكي (رقم الشاصي)</h1>
+            <input type="text" id="vinInput" placeholder="أدخل رقم الشاصي (VIN) للسيارة..." onkeyup="smartSearch()">
+            <div id="smartResult" style="margin-top:20px;"></div>
+        </div>
     </div>
-    <div id="salesPage" class="page"><h1>قسم المبيعات</h1></div>
-    <div id="reportsPage" class="page"><h1>التقارير المالية</h1></div>
+
+    <div id="inventory" class="page">
+        <div class="card">
+            <h1>قائمة الأصناف</h1>
+            <table id="partsTable"><thead><tr><th>رقم القطعة</th><th>الاسم</th><th>الموديل</th></tr></thead><tbody></tbody></table>
+        </div>
+    </div>
 </div>
 
 <script>
-    // قاعدة البيانات المستخرجة من ملفاتك
+    // قاعدة بيانات الموديلات والكتالوجات (من ملف فهرس البحث)
+    const catalogMap = { "GA6": "https://drive.google.com/file/d/1xkMbMK31AIIZXx-lhdwl0jmhSlx-_EtO/view", "GA8": "https://drive.google.com/file/d/1PIDaMVFK3aqChNzQ26vB800EWnAVLEXv/view" };
+    
+    // قاعدة بيانات القطع (من ملف SMART SYSTEM)
     const dbItems = [
-        { partNo: "10110451310000", name: "OIL COLLER", model: "GAC MOTOR" },
-        { partNo: "10120231310000", name: "WATER PUMP", model: "GAC" },
-        { partNo: "10120221510000", name: "WATER PUMP", model: "GSE" },
-        { partNo: "10120317040000", name: "WATER PUMP", model: "GS" },
-        { partNo: "8530001CSV0000", name: "WATER OUT TUBE", model: "GAC-66" }
+        { partNo: "10110451310000", name: "OIL COLLER", model: "GA6" },
+        { partNo: "10120231310000", name: "WATER PUMP", model: "GA8" }
     ];
 
     function show(id) {
@@ -57,16 +59,24 @@
         document.getElementById(id).classList.add('active');
     }
 
-    function searchItems() {
-        let query = document.getElementById('searchInput').value.toLowerCase();
-        let tbody = document.querySelector('#itemsTable tbody');
-        tbody.innerHTML = dbItems.filter(i => 
-            i.partNo.toLowerCase().includes(query) || 
-            i.name.toLowerCase().includes(query)
-        ).map(i => `<tr><td>${i.partNo}</td><td>${i.name}</td><td>${i.model}</td></tr>`).join('');
+    function smartSearch() {
+        let vin = document.getElementById('vinInput').value.toUpperCase();
+        let resDiv = document.getElementById('smartResult');
+        let model = vin.includes("6") ? "GA6" : "GA8"; 
+        
+        if (vin.length > 5) {
+            let parts = dbItems.filter(p => p.model === model);
+            resDiv.innerHTML = `<h4>السيارة المكتشفة: ${model}</h4>
+                                <a href="${catalogMap[model]}" target="_blank" style="color:blue;">🔗 افتح كتالوج القطع</a>
+                                <table>${parts.map(p => `<tr><td>${p.partNo}</td><td>${p.name}</td></tr>`).join('')}</table>`;
+        }
     }
 
-    window.onload = searchItems;
+    // عرض الأصناف عند التشغيل
+    window.onload = () => {
+        let tbody = document.querySelector('#partsTable tbody');
+        tbody.innerHTML = dbItems.map(i => `<tr><td>${i.partNo}</td><td>${i.name}</td><td>${i.model}</td></tr>`).join('');
+    };
 </script>
 </body>
 </html>
