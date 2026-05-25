@@ -2,56 +2,61 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>نظام الرويعي الذكي | المحرك الذكي</title>
+    <title>نظام الرويعي الذكي المتكامل</title>
     <style>
         :root { --primary: #0c2340; --accent: #d4af37; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f4f7f6; display: flex; }
         .sidebar { width: 280px; background: var(--primary); color: white; height: 100vh; padding: 20px; }
-        .nav-item { padding: 12px; cursor: pointer; color: #cbd5e1; border-bottom: 1px solid #1e3a5f; }
+        .nav-item { padding: 15px; cursor: pointer; color: #ccc; border-bottom: 1px solid #1e3a5f; }
         .nav-item:hover { color: white; background: #1e3a5f; }
         .content { flex: 1; padding: 30px; }
         .page { display: none; }
         .active { display: block; }
-        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        input { width: 100%; padding: 15px; border: 2px solid var(--primary); border-radius: 8px; font-size: 16px; margin: 15px 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: var(--primary); color: white; padding: 12px; }
+        td { border: 1px solid #ddd; padding: 12px; text-align: center; }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
-    <h2 style="color:var(--accent); text-align:center;">الرويعي الذكي</h2>
+    <h2 style="color:var(--accent); text-align:center;">الرويعي للنظم</h2>
     <div class="nav-item" onclick="show('smartSearch')">🔍 محرك البحث الذكي (الشاصي)</div>
-    <div class="nav-item" onclick="show('inventory')">📦 إدارة المخزون والأصناف</div>
-    <div class="nav-item" onclick="show('sales')">🧾 تسجيل المبيعات</div>
+    <div class="nav-item" onclick="show('items')">📦 قائمة الأصناف الكاملة</div>
 </div>
 
 <div class="content">
     <div id="smartSearch" class="page active">
         <div class="card">
-            <h1>المحرك الذكي (رقم الشاصي)</h1>
-            <input type="text" id="vinInput" placeholder="أدخل رقم الشاصي (VIN) للسيارة..." onkeyup="smartSearch()">
-            <div id="smartResult" style="margin-top:20px;"></div>
+            <h1>البحث برقم الشاصي (VIN)</h1>
+            <input type="text" id="vinInput" placeholder="أدخل رقم الشاصي..." onkeyup="smartSearch()">
+            <div id="smartResult"></div>
         </div>
     </div>
 
-    <div id="inventory" class="page">
+    <div id="items" class="page">
         <div class="card">
-            <h1>قائمة الأصناف</h1>
-            <table id="partsTable"><thead><tr><th>رقم القطعة</th><th>الاسم</th><th>الموديل</th></tr></thead><tbody></tbody></table>
+            <h1>الأصناف المتوفرة</h1>
+            <table id="partsTable"><thead><tr><th>رقم القطعة</th><th>اسم القطعة</th><th>الموديل</th></tr></thead><tbody></tbody></table>
         </div>
     </div>
 </div>
 
 <script>
-    // قاعدة بيانات الموديلات والكتالوجات (من ملف فهرس البحث)
-    const catalogMap = { "GA6": "https://drive.google.com/file/d/1xkMbMK31AIIZXx-lhdwl0jmhSlx-_EtO/view", "GA8": "https://drive.google.com/file/d/1PIDaMVFK3aqChNzQ26vB800EWnAVLEXv/view" };
-    
-    // قاعدة بيانات القطع (من ملف SMART SYSTEM)
+    // 1. قاعدة بيانات الكتالوجات (مستخرجة من ملف فهرس البحث)
+    const catalogMap = {
+        "GA6": "https://drive.google.com/file/d/1xkMbMK31AIIZXx-lhdwl0jmhSlx-_EtO/view",
+        "GA8": "https://drive.google.com/file/d/1PIDaMVFK3aqChNzQ26vB800EWnAVLEXv/view",
+        "GA4": "https://drive.google.com/file/d/1yTIYDizTfRHU7j0f5lznqlyr2-dCaDKj/view"
+    };
+
+    // 2. قاعدة بيانات القطع (مستخرجة من ملف SMART SYSTEM)
     const dbItems = [
         { partNo: "10110451310000", name: "OIL COLLER", model: "GA6" },
-        { partNo: "10120231310000", name: "WATER PUMP", model: "GA8" }
+        { partNo: "10120231310000", name: "WATER PUMP", model: "GA8" },
+        { partNo: "10120221510000", name: "WATER PUMP", model: "GA4" }
     ];
 
     function show(id) {
@@ -62,17 +67,19 @@
     function smartSearch() {
         let vin = document.getElementById('vinInput').value.toUpperCase();
         let resDiv = document.getElementById('smartResult');
-        let model = vin.includes("6") ? "GA6" : "GA8"; 
+        let model = vin.includes("6") ? "GA6" : (vin.includes("8") ? "GA8" : "GA4");
         
-        if (vin.length > 5) {
+        if (vin.length >= 4) {
             let parts = dbItems.filter(p => p.model === model);
-            resDiv.innerHTML = `<h4>السيارة المكتشفة: ${model}</h4>
-                                <a href="${catalogMap[model]}" target="_blank" style="color:blue;">🔗 افتح كتالوج القطع</a>
-                                <table>${parts.map(p => `<tr><td>${p.partNo}</td><td>${p.name}</td></tr>`).join('')}</table>`;
+            resDiv.innerHTML = `<h3>السيارة المكتشفة: ${model}</h3>
+                                <a href="${catalogMap[model]}" target="_blank" style="color:red; font-weight:bold;">📄 اضغط لفتح كتالوج قطع ${model}</a>
+                                <table><tr><th>رقم القطعة</th><th>الاسم</th></tr>
+                                ${parts.map(p => `<tr><td>${p.partNo}</td><td>${p.name}</td></tr>`).join('')}
+                                </table>`;
         }
     }
 
-    // عرض الأصناف عند التشغيل
+    // تعبئة جدول الأصناف عند البدء
     window.onload = () => {
         let tbody = document.querySelector('#partsTable tbody');
         tbody.innerHTML = dbItems.map(i => `<tr><td>${i.partNo}</td><td>${i.name}</td><td>${i.model}</td></tr>`).join('');
