@@ -2,64 +2,54 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>نظام الرويعي الذكي المتكامل</title>
+    <title>الرويعي الذكي - نظام متكامل</title>
     <style>
         :root { --primary: #0c2340; --accent: #d4af37; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f4f7f6; display: flex; }
-        
-        /* القائمة الجانبية */
-        .sidebar { width: 280px; background: var(--primary); color: white; height: 100vh; padding: 20px; }
-        .group-title { color: var(--accent); font-weight: bold; margin-top: 20px; border-bottom: 1px solid #1e3a5f; padding-bottom: 5px; }
+        .sidebar { width: 260px; background: var(--primary); color: white; height: 100vh; padding: 20px; }
+        .group-title { color: var(--accent); font-weight: bold; margin-top: 15px; border-bottom: 1px solid #1e3a5f; padding-bottom: 5px; }
         .nav-item { padding: 10px; cursor: pointer; color: #ccc; }
-        .nav-item:hover { color: white; background: #1e3a5f; }
-        
-        /* المحتوى */
+        .nav-item:hover { background: #1e3a5f; color: white; }
         .content { flex: 1; padding: 30px; }
         .page { display: none; }
         .active { display: block; }
-        table { width: 100%; border-collapse: collapse; background: white; margin-top: 10px; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
-        .search-bar { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #ddd; }
+        .search-bar { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px; }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
     <h2 style="color:var(--accent); text-align:center;">الرويعي الذكي</h2>
-    
-    <div class="group-title">📦 المخزون والأصناف</div>
-    <div class="nav-item" onclick="show('items')">قائمة الأصناف والبحث</div>
-    <div class="nav-item" onclick="show('inventory')">مراقبة الجرد</div>
-
-    <div class="group-title">🧾 الفواتير</div>
-    <div class="nav-item" onclick="show('sales')">المبيعات</div>
-    <div class="nav-item" onclick="show('purchases')">المشتريات</div>
-    
-    <div class="group-title">📊 التقارير</div>
-    <div class="nav-item" onclick="show('reports')">التقارير المالية والضريبة</div>
+    <div class="group-title">📦 إدارة الأصناف</div>
+    <div class="nav-item" onclick="show('itemsPage')">البحث في الأصناف</div>
+    <div class="group-title">🧾 العمليات</div>
+    <div class="nav-item" onclick="show('salesPage')">تسجيل مبيعات</div>
+    <div class="nav-item" onclick="show('reportsPage')">التقارير</div>
 </div>
 
 <div class="content">
-    <div id="items" class="page active">
-        <h1>إدارة الأصناف (قاعدة البيانات)</h1>
-        <input type="text" id="searchInput" class="search-bar" placeholder="ابحث عن رقم القطعة أو الاسم..." onkeyup="searchItems()">
+    <div id="itemsPage" class="page active">
+        <h1>البحث في الأصناف</h1>
+        <input type="text" id="searchInput" class="search-bar" placeholder="ابحث برقم القطعة أو الاسم..." onkeyup="searchItems()">
         <table id="itemsTable">
             <thead><tr><th>رقم القطعة</th><th>اسم القطعة</th><th>الموديل</th></tr></thead>
             <tbody></tbody>
         </table>
     </div>
-    <div id="inventory" class="page"><h1>مراقبة الجرد</h1><p>قسم الجرد.</p></div>
-    <div id="sales" class="page"><h1>المبيعات</h1></div>
-    <div id="purchases" class="page"><h1>المشتريات</h1></div>
-    <div id="reports" class="page"><h1>التقارير والزكاة</h1></div>
+    <div id="salesPage" class="page"><h1>قسم المبيعات</h1></div>
+    <div id="reportsPage" class="page"><h1>التقارير المالية</h1></div>
 </div>
 
 <script>
-    // قاعدة بيانات القطع المدمجة من ملفاتك
+    // قاعدة البيانات المستخرجة من ملفاتك
     const dbItems = [
         { partNo: "10110451310000", name: "OIL COLLER", model: "GAC MOTOR" },
         { partNo: "10120231310000", name: "WATER PUMP", model: "GAC" },
-        { partNo: "10120221510000", name: "WATER PUMP", model: "GSE" }
+        { partNo: "10120221510000", name: "WATER PUMP", model: "GSE" },
+        { partNo: "10120317040000", name: "WATER PUMP", model: "GS" },
+        { partNo: "8530001CSV0000", name: "WATER OUT TUBE", model: "GAC-66" }
     ];
 
     function show(id) {
@@ -70,11 +60,12 @@
     function searchItems() {
         let query = document.getElementById('searchInput').value.toLowerCase();
         let tbody = document.querySelector('#itemsTable tbody');
-        tbody.innerHTML = dbItems.filter(i => i.partNo.includes(query) || i.name.toLowerCase().includes(query))
-            .map(i => `<tr><td>${i.partNo}</td><td>${i.name}</td><td>${i.model}</td></tr>`).join('');
+        tbody.innerHTML = dbItems.filter(i => 
+            i.partNo.toLowerCase().includes(query) || 
+            i.name.toLowerCase().includes(query)
+        ).map(i => `<tr><td>${i.partNo}</td><td>${i.name}</td><td>${i.model}</td></tr>`).join('');
     }
 
-    // عرض البيانات عند التشغيل
     window.onload = searchItems;
 </script>
 </body>
