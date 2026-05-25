@@ -27,7 +27,23 @@
         <nav class="nav flex-column">
             <a href="#" class="nav-link active"><i class="bi bi-house-door"></i> الرئيسية</a>
             <a href="#" class="nav-link"><i class="bi bi-cart"></i> الطلبات</a>
-            <a href="#" class="nav-link"><i class="bi bi-box-seam"></i> المخزون</a>
+            <a href="#" class="nav-link"><i class="bi bi-box-seam"></i> المخزون
+            <table class="table table-dark table-hover">
+    <thead>
+        <tr>
+            <th>رقم القطعة</th>
+            <th>اسم القطعة</th>
+            <th>الكمية</th>
+            <th>سعر التكلفة</th>
+            <th>سعر البيع</th>
+            <th>الموقع</th>
+        </tr>
+    </thead>
+    <tbody id="inventoryBody">
+        </tbody>
+            </table>
+                
+            </a>
             <a href="#" class="nav-link"><i class="bi bi-people"></i> العملاء</a>
             <a href="#" class="nav-link"><i class="bi bi-tools"></i> الورش</a>
             <a href="#" class="nav-link"><i class="bi bi-graph-up"></i> التقارير</a>
@@ -50,4 +66,29 @@
 </div>
 
 </body>
+    <script>
+async function loadInventory() {
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSnkWPRCRsJDvFPh6YXTCGZcg8DQs-2b6-ziJKDE_OpFcRB3sB2UeTUkAxe6EPPOJiVYtI_o9H8KyqM/pub?gid=0&single=true&output=csv';
+    const response = await fetch(csvUrl);
+    const data = await response.text();
+    const rows = data.split('\n').slice(1);
+    const tableBody = document.getElementById('inventoryBody');
+    tableBody.innerHTML = '';
+    
+    rows.forEach(row => {
+        const cols = row.split(',');
+        if (cols.length < 10) return;
+        tableBody.innerHTML += `<tr>
+            <td>${cols[0]}</td>
+            <td>${cols[1]}</td>
+            <td>${cols[7]}</td>
+            <td>${cols[8]}</td>
+            <td>${cols[9]}</td>
+            <td>${cols[10]}</td>
+        </tr>`;
+    });
+}
+loadInventory();
+    </script>
+    
 </html>
