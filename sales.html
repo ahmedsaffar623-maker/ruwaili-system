@@ -43,6 +43,10 @@
                 // تفريغ الحقول بعد التسجيل
                 document.getElementById('itemName').value = "";
                 document.getElementById('cost').value = "";
+                // أضف هذا داخل دالة addSale بعد تعريف متغير final
+let time = new Date().toLocaleTimeString('ar-SA');
+entry.innerHTML = name + " (" + time + "): <span class='text-warning'>" + final + " ريال</span>";
+                
             }
         }
     </script>
