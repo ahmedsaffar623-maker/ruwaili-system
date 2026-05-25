@@ -1,221 +1,70 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>نظام مؤسسة الرويعي</title>
-
-<style>
-/* ====== إعدادات عامة ====== */
-body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
-    background: #eef2f7;
-}
-
-/* ====== شاشة الدخول ====== */
-#login-screen {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: linear-gradient(135deg, #0c2340, #1f3c88);
-}
-
-.login-card {
-    background: #fff;
-    padding: 40px;
-    border-radius: 15px;
-    width: 350px;
-    text-align: center;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-    animation: fadeIn 0.5s ease-in-out;
-}
-
-.login-card h2 {
-    margin-bottom: 5px;
-    color: #0c2340;
-}
-
-.login-card p {
-    color: #777;
-    margin-bottom: 20px;
-}
-
-input {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    outline: none;
-    transition: 0.3s;
-}
-
-input:focus {
-    border-color: #1f3c88;
-}
-
-/* زر */
-.btn {
-    width: 100%;
-    padding: 12px;
-    background: #0c2340;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
-    font-weight: bold;
-}
-
-.btn:hover {
-    background: #1f3c88;
-}
-
-/* ====== النظام الداخلي ====== */
-#main-system {
-    display: none;
-    height: 100vh;
-}
-
-/* الشريط الجانبي */
-.sidebar {
-    width: 240px;
-    background: #1e272e;
-    color: white;
-    padding: 20px;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-}
-
-.sidebar h3 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-/* عناصر القائمة */
-.nav-item {
-    padding: 12px;
-    margin: 8px 0;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: 0.3s;
-    background: #2f3640;
-}
-
-.nav-item:hover {
-    background: #40739e;
-}
-
-/* المحتوى */
-.content {
-    flex: 1;
-    padding: 30px;
-    overflow-y: auto;
-}
-
-/* الصفحات */
-.page {
-    display: none;
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-}
-
-/* الصفحة الافتراضية */
-.page.active {
-    display: block;
-}
-
-/* حركة */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* ====== موبايل ====== */
-@media (max-width: 768px) {
-    #main-system {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        width: 100%;
-        display: flex;
-        justify-content: space-around;
-    }
-
-    .nav-item {
-        flex: 1;
-        text-align: center;
-    }
-}
-</style>
+    <meta charset="UTF-8">
+    <title>نظام مؤسسة الرويعي المتكامل</title>
+    <style>
+        body { font-family: 'Cairo', sans-serif; display: flex; margin: 0; background: #f4f7f6; }
+        .sidebar { width: 260px; background: #0c2340; color: white; height: 100vh; padding: 20px; overflow-y: auto; }
+        .menu-group { margin-bottom: 15px; }
+        .group-title { padding: 10px; font-weight: bold; border-bottom: 1px solid #1e3a5f; color: #d4af37; }
+        .nav-item { padding: 10px 20px; cursor: pointer; color: #cbd5e1; }
+        .nav-item:hover { background: #1e3a5f; color: white; }
+        .content { flex: 1; padding: 30px; }
+        .page { display: none; }
+        .active { display: block; }
+        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    </style>
 </head>
-
 <body>
 
-<!-- شاشة الدخول -->
-<div id="login-screen">
-    <div class="login-card">
-        <h2>مؤسسة الرويعي</h2>
-        <p>تسجيل الدخول للنظام</p>
+<div class="sidebar">
+    <h2 style="text-align:center; color:#d4af37;">الرويعي للنظم</h2>
+    
+    <div class="menu-group">
+        <div class="group-title">📦 المخزون</div>
+        <div class="nav-item" onclick="show('inv-monitoring')">مراقبة المخزون</div>
+        <div class="nav-item" onclick="show('inventory-count')">الجرد</div>
+        <div class="nav-item" onclick="show('items')">الأصناف</div>
+        <div class="nav-item" onclick="show('alerts')">التنبيهات</div>
+    </div>
 
-        <input type="text" id="username" placeholder="اسم المستخدم">
-        <input type="password" id="password" placeholder="كلمة المرور">
+    <div class="menu-group">
+        <div class="group-title">👥 العملاء</div>
+        <div class="nav-item" onclick="show('individuals')">الأفراد</div>
+        <div class="nav-item" onclick="show('workshops')">الورش</div>
+    </div>
 
-        <button class="btn" onclick="checkLogin()">دخول</button>
+    <div class="menu-group">
+        <div class="group-title">🧾 الفواتير</div>
+        <div class="nav-item" onclick="show('sales')">المبيعات</div>
+        <div class="nav-item" onclick="show('purchases')">المشتريات</div>
+        <div class="nav-item" onclick="show('deferred')">الفواتير الآجلة</div>
     </div>
 </div>
 
-<!-- النظام الداخلي -->
-<div id="main-system">
-
-    <div class="sidebar">
-        <h3>القائمة</h3>
-        <div class="nav-item" onclick="show('dashboard')">لوحة التحكم</div>
-        <div class="nav-item" onclick="show('inventory')">المخزون</div>
-        <div class="nav-item" onclick="show('sales')">المبيعات</div>
-    </div>
-
-    <div class="content">
-
-        <div id="dashboard" class="page active">
-            <h1>📊 لوحة التحكم</h1>
-            <p>مرحباً بك في نظام مؤسسة الرويعي.</p>
-        </div>
-
-        <div id="inventory" class="page">
-            <h1>📦 المخزون</h1>
-            <p>إدارة قطع الغيار والكميات.</p>
-        </div>
-
-        <div id="sales" class="page">
-            <h1>💰 المبيعات</h1>
-            <p>سجل العمليات اليومية.</p>
-        </div>
-
-    </div>
+<div class="content">
+    <div id="inv-monitoring" class="page active"><h1>مراقبة المخزون</h1><div class="card">بيانات المراقبة هنا...</div></div>
+    <div id="inventory-count" class="page"><h1>الجرد</h1></div>
+    <div id="items" class="page"><h1>الأصناف</h1></div>
+    <div id="alerts" class="page"><h1>التنبيهات</h1></div>
+    <div id="individuals" class="page"><h1>عملاء: الأفراد</h1></div>
+    <div id="workshops" class="page"><h1>عملاء: الورش</h1></div>
+    <div id="sales" class="page"><h1>المبيعات</h1></div>
+    <div id="purchases" class="page"><h1>المشتريات</h1></div>
+    <div id="deferred" class="page"><h1>الفواتير الآجلة</h1></div>
 </div>
 
 <script>
-function checkLogin() {
-    let user = document.getElementById('username').value;
-    let pass = document.getElementById('password').value;
+    // قاعدة البيانات المركزية
+    let db = JSON.parse(localStorage.getItem('systemDB')) || {
+        inventory: [], sales: [], purchases: [], clients: []
+    };
 
-    if (user === "admin" && pass === "123") {
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('main-system').style.display = 'flex';
-    } else {
-        alert("بيانات الدخول غير صحيحة!");
+    function show(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
     }
-}
-
-function show(id) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-}
 </script>
-
 </body>
 </html>
