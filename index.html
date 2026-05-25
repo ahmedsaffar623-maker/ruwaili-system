@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <title>نظام مؤسسة الرويعي المتكامل</title>
     <style>
-        body { font-family: 'Cairo', sans-serif; display: flex; margin: 0; background: #f4f7f6; }
-        .sidebar { width: 260px; background: #0c2340; color: white; height: 100vh; padding: 20px; overflow-y: auto; }
-        .menu-group { margin-bottom: 15px; }
-        .group-title { padding: 10px; font-weight: bold; border-bottom: 1px solid #1e3a5f; color: #d4af37; }
-        .nav-item { padding: 10px 20px; cursor: pointer; color: #cbd5e1; }
+        body { font-family: 'Segoe UI', sans-serif; display: flex; margin: 0; background: #f4f7f6; }
+        .sidebar { width: 270px; background: #0c2340; color: white; height: 100vh; padding: 20px; overflow-y: auto; }
+        .group-title { color: #d4af37; padding: 10px 0; font-weight: bold; border-bottom: 1px solid #1e3a5f; margin-top: 15px; }
+        .nav-item { padding: 10px; cursor: pointer; color: #cbd5e1; font-size: 14px; }
         .nav-item:hover { background: #1e3a5f; color: white; }
         .content { flex: 1; padding: 30px; }
         .page { display: none; }
         .active { display: block; }
-        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; background: white; margin-top: 15px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
     </style>
 </head>
 <body>
@@ -21,45 +21,39 @@
 <div class="sidebar">
     <h2 style="text-align:center; color:#d4af37;">الرويعي للنظم</h2>
     
-    <div class="menu-group">
-        <div class="group-title">📦 المخزون</div>
-        <div class="nav-item" onclick="show('inv-monitoring')">مراقبة المخزون</div>
-        <div class="nav-item" onclick="show('inventory-count')">الجرد</div>
-        <div class="nav-item" onclick="show('items')">الأصناف</div>
-        <div class="nav-item" onclick="show('alerts')">التنبيهات</div>
-    </div>
+    <div class="group-title">📦 المخزون</div>
+    <div class="nav-item" onclick="show('monitoring')">مراقبة المخزون</div>
+    <div class="nav-item" onclick="show('inventory')">الجرد والأصناف</div>
+    <div class="nav-item" onclick="show('alerts')">التنبيهات</div>
 
-    <div class="menu-group">
-        <div class="group-title">👥 العملاء</div>
-        <div class="nav-item" onclick="show('individuals')">الأفراد</div>
-        <div class="nav-item" onclick="show('workshops')">الورش</div>
-    </div>
+    <div class="group-title">👥 العملاء</div>
+    <div class="nav-item" onclick="show('individuals')">الأفراد</div>
+    <div class="nav-item" onclick="show('workshops')">الورش</div>
 
-    <div class="menu-group">
-        <div class="group-title">🧾 الفواتير</div>
-        <div class="nav-item" onclick="show('sales')">المبيعات</div>
-        <div class="nav-item" onclick="show('purchases')">المشتريات</div>
-        <div class="nav-item" onclick="show('deferred')">الفواتير الآجلة</div>
-    </div>
+    <div class="group-title">🧾 الفواتير</div>
+    <div class="nav-item" onclick="show('sales')">المبيعات</div>
+    <div class="nav-item" onclick="show('purchases')">المشتريات</div>
+    <div class="nav-item" onclick="show('deferred')">الفواتير الآجلة</div>
+
+    <div class="group-title">📊 التقارير</div>
+    <div class="nav-item" onclick="show('rep-profit')">الأرباح والضريبة</div>
 </div>
 
 <div class="content">
-    <div id="inv-monitoring" class="page active"><h1>مراقبة المخزون</h1><div class="card">بيانات المراقبة هنا...</div></div>
-    <div id="inventory-count" class="page"><h1>الجرد</h1></div>
-    <div id="items" class="page"><h1>الأصناف</h1></div>
+    <div id="monitoring" class="page active"><h1>مراقبة المخزون وحركة الصنف</h1></div>
+    <div id="inventory" class="page"><h1>الجرد والأصناف</h1></div>
     <div id="alerts" class="page"><h1>التنبيهات</h1></div>
     <div id="individuals" class="page"><h1>عملاء: الأفراد</h1></div>
     <div id="workshops" class="page"><h1>عملاء: الورش</h1></div>
     <div id="sales" class="page"><h1>المبيعات</h1></div>
     <div id="purchases" class="page"><h1>المشتريات</h1></div>
     <div id="deferred" class="page"><h1>الفواتير الآجلة</h1></div>
+    <div id="rep-profit" class="page"><h1>تقرير الأرباح والإقرار الضريبي</h1></div>
 </div>
 
 <script>
-    // قاعدة البيانات المركزية
-    let db = JSON.parse(localStorage.getItem('systemDB')) || {
-        inventory: [], sales: [], purchases: [], clients: []
-    };
+    // قاعدة البيانات
+    let db = JSON.parse(localStorage.getItem('rwailiDB')) || { items: [], sales: [] };
 
     function show(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
