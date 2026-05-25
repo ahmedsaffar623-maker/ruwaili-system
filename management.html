@@ -41,6 +41,7 @@
 
     <div id="inventory" class="page active">
         <div class="card">
+            <h2>قائمة المخزون</h2>
             <table>
                 <thead><tr><th>رقم القطعة</th><th>الاسم</th><th>الكمية</th><th>الحالة</th></tr></thead>
                 <tbody><tr><td>-</td><td>-</td><td>-</td><td>-</td></tr></tbody>
@@ -49,21 +50,25 @@
     </div>
 
     <div id="invoices" class="page">
-        <div class="card"><p>قائمة الفواتير فارغة</p></div>
+        <div class="card"><h2>سجل الفواتير</h2><p>قائمة الفواتير فارغة</p></div>
     </div>
 
     <div id="purchases" class="page">
-        <div class="card"><p>لا توجد طلبات شراء</p></div>
+        <div class="card"><h2>طلبات الشراء</h2><p>لا توجد طلبات شراء</p></div>
     </div>
 
     <div id="reports" class="page">
-        <div class="card"><p>التقارير سيتم توليدها لاحقاً</p>
+        <div class="card"><h2>التقارير التحليلية</h2><p>التقارير سيتم توليدها لاحقاً</p></div>
     </div>
 
     <script>
         function showPage(pageId, element) {
+            // إخفاء جميع الصفحات
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // إزالة التفعيل من جميع الأزرار
             document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+            
+            // تفعيل الصفحة والزر المختار
             document.getElementById(pageId).classList.add('active');
             element.classList.add('active');
         }
