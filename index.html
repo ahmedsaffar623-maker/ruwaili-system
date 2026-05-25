@@ -2,62 +2,69 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>نظام مؤسسة الرويعي الذكي</title>
+    <title>نظام مؤسسة الرويعي</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; margin:0; display:flex; background:#f4f7f6; }
-        .sidebar { width: 250px; background: #0c2340; color: white; height: 100vh; padding: 20px; }
-        .nav-item { padding: 15px; cursor: pointer; border-bottom: 1px solid #1e3a5f; }
-        .nav-item:hover { background: #1e3a5f; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f4f7f6; }
+        
+        /* واجهة الدخول */
+        #login-screen { display: flex; justify-content: center; align-items: center; height: 100vh; background: #0c2340; }
+        .login-card { background: white; padding: 40px; border-radius: 15px; width: 350px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        .btn { width: 100%; padding: 12px; background: #0c2340; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        
+        /* النظام الداخلي */
+        #main-system { display: none; display: flex; }
+        .sidebar { width: 220px; background: #2d3436; color: white; height: 100vh; padding: 20px; }
+        .nav-item { padding: 15px; cursor: pointer; border-bottom: 1px solid #4a4e51; }
+        .nav-item:hover { background: #636e72; }
         .content { flex: 1; padding: 30px; }
-        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        .alert { color: red; font-weight: bold; }
+        .page { display: none; }
     </style>
 </head>
 <body>
 
-<div class="sidebar">
-    <h2>مؤسسة الرويعي</h2>
-    <div class="nav-item" onclick="show('dashboard')">لوحة التحكم</div>
-    <div class="nav-item" onclick="show('inventory')">المخزون</div>
-    <div class="nav-item" onclick="show('sales')">المبيعات</div>
-    <div class="nav-item" onclick="show('purchases')">المشتريات</div>
-    <div class="nav-item" onclick="show('payments')">سندات قبض</div>
-    <div class="nav-item" onclick="show('reports')">التقارير</div>
-</div>
-
-<div class="content">
-    <div id="dashboard" class="page">
-        <h1>لوحة التحكم</h1>
-        <div class="card" id="alerts"><h3>تنبيهات المخزون:</h3></div>
+    <div id="login-screen">
+        <div class="login-card">
+            <h2>مؤسسة الرويعي</h2>
+            <p>تسجيل الدخول للنظام</p>
+            <input type="text" id="username" placeholder="اسم المستخدم">
+            <input type="password" id="password" placeholder="كلمة المرور">
+            <button class="btn" onclick="checkLogin()">دخول</button>
+        </div>
     </div>
-    <div id="inventory" class="page" style="display:none;"><h1>المخزون</h1></div>
-    <div id="sales" class="page" style="display:none;"><h1>المبيعات</h1></div>
-    <div id="purchases" class="page" style="display:none;"><h1>المشتريات</h1></div>
-    <div id="payments" class="page" style="display:none;"><h1>سندات القبض</h1></div>
-    <div id="reports" class="page" style="display:none;"><h1>التقارير</h1></div>
-</div>
 
-<script>
-    // قاعدة البيانات المركزية
-    let db = JSON.parse(localStorage.getItem('mySystemDB')) || {
-        items: [], sales: [], purchases: [], payments: []
-    };
+    <div id="main-system">
+        <div class="sidebar">
+            <h3>القائمة الرئيسية</h3>
+            <div class="nav-item" onclick="show('dashboard')">لوحة التحكم</div>
+            <div class="nav-item" onclick="show('inventory')">المخزون</div>
+            <div class="nav-item" onclick="show('sales')">المبيعات</div>
+        </div>
+        <div class="content" id="content">
+            <div id="dashboard" class="page" style="display:block;"><h1>لوحة التحكم</h1><p>مرحباً بك في نظام مؤسسة الرويعي.</p></div>
+            <div id="inventory" class="page"><h1>المخزون</h1><p>إدارة قطع الغيار والكميات.</p></div>
+            <div id="sales" class="page"><h1>المبيعات</h1><p>سجل العمليات اليومية.</p></div>
+        </div>
+    </div>
 
-    function show(pageId) {
-        document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
-        document.getElementById(pageId).style.display = 'block';
-    }
+    <script>
+        function checkLogin() {
+            // يمكنك تغيير كلمة المرور هنا
+            let user = document.getElementById('username').value;
+            let pass = document.getElementById('password').value;
+            
+            if(user === "admin" && pass === "123") {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('main-system').style.display = 'flex';
+            } else {
+                alert("بيانات الدخول غير صحيحة!");
+            }
+        }
 
-    // فحص التنبيهات تلقائياً
-    function checkAlerts() {
-        let lowStock = db.items.filter(i => i.stock < 5);
-        let alertDiv = document.getElementById('alerts');
-        lowStock.forEach(i => {
-            alertDiv.innerHTML += `<p class="alert">تنبيه: ${i.name} وصل لحد الطلب (${i.stock})</p>`;
-        });
-    }
-
-    checkAlerts();
-</script>
+        function show(id) {
+            document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+            document.getElementById(id).style.display = 'block';
+        }
+    </script>
 </body>
 </html>
